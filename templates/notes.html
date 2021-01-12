@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="5Clouds Notes App">
+        <title>5Clouds Notes App - View your Notes</title>
+        <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='main1.css') }}">
+        <nav>
+            <a href="{{ url_for('index') }}"> Home</a> 
+            <a href="{{ url_for('get_notes') }}"> My Notes</a> 
+            <a href="{{ url_for('new_note') }}"> Add Note</a> ||
+            <a href="{{ url_for('get_trash') }}"> Trash</a>
+       </nav>
+        <nav>
+            <a href="{{ url_for('logout') }}"> Logout</a>
+        </nav>
+    </head>
+    <body>
+        <h1>Welcome {{user}} to the 5Clouds Notes App!</h1>
+        <h1>Listing notes</h1>
+
+	<h2>Search Menu</h2>
+	<p>Start to type for a specific category inside the search bar to "filter" the search options.</p>
+
+	<div class="row">
+ 	 <div class="left" style="background-color:#bbb;">
+   	 <h2>Menu</h2>
+   	 <input type="text" id="mySearch" onkeyup="myFunction()" placeholder="Search.." title="Type in a category">
+  	  <ul id="myNotes">
+   	   <li><table>
+
+            {% for note in notes %}
+          
+            <tr>
+                <td><a href="{{ url_for('get_note', note_id=note.id) }}">{{ note.title }}</a></td>
+                <td>{{ note.date }}</td>
+                                <td class="a"><a href="{{ url_for('update_note', note_id=note.id) }}">Edit</a></td>
+                <td class="a"> 
+                    <form action="{{ url_for('delete_note', note_id=note.id) }}" method="post">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+                <td class="a">
+                        <input onclick="change()" type="button" value="Favorite" id="favorite"></input>
+                    </form>
+                </td>
+                
+            </tr>
+            {% endfor %}
+        </table>
+</li>
+  	  </ul>
+ 	 </div>
+	 <script>
+		function myFunction() {
+ 		 var input, filter, ul, tr, a, i;
+	 	 input = document.getElementById("mySearch");
+ 		 filter = input.value.toUpperCase();
+ 		 ul = document.getElementById("myNotes");
+ 		 tr = ul.getElementsByTagName("tr");
+ 		 for (i = 0; i < tr.length; i++) {
+ 		   a = tr[i].getElementsByTagName("a")[0];
+  		  if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+ 		     tr[i].style.display = "";
+ 		   } else {
+ 		     tr[i].style.display = "none";
+    }
+  }
+}
+		function change() {
+    var elem = document.getElementById("favorite");
+    if (elem.value=="favorite") elem.value = "*Favorited*";
+    else elem.value = "favorite";
+}
+</script>
+
+    
+       
+    </body>
+</html>
